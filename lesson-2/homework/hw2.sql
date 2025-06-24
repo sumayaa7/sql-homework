@@ -132,4 +132,5 @@ MODIFY COLUMN Price FLOAT;
 -- SQL Server:
 ALTER TABLE Inventory
 ADD ProductCode INT IDENTITY(1000, 5);
+    
 
