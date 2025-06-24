@@ -60,12 +60,12 @@ TRUNCATE TABLE Employees;
 
 --2.  
 -- 1. Insert five records into Departments using INSERT INTO ... SELECT
--- First, use UNION ALL to simulate data selection
+-- First, use SELECT ALL to simulate data selection
 INSERT INTO Departments (DepartmentID, DepartmentName)
-SELECT 1, 'HR' UNION ALL
-SELECT 2, 'Finance' UNION ALL
-SELECT 3, 'IT' UNION ALL
-SELECT 4, 'Sales' UNION ALL
+SELECT 1, 'HR' SELECT ALL
+SELECT 2, 'Finance' SELECT ALL
+SELECT 3, 'IT' SELECT ALL
+SELECT 4, 'Sales' SELECT ALL
 SELECT 5, 'Marketing';
 
 -- 2. Update Department of all employees where Salary > 5000 to 'Management'
