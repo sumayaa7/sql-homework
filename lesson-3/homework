@@ -1,0 +1,110 @@
+1. BULK INSERT is a command in SQL Server used to quickly import large amounts of data from a file (such as a text file or CSV file) directly into a database table.
+Purpose: To efficiently load data into a table without manually inserting each row. It is often used for data migration, importing logs, or loading external datasets.
+
+
+  2. 
+    CSV (Comma-Separated Values)
+		TXT (Plain text file with delimiters)
+		XML (Extensible Markup Language)
+		JSON (JavaScript Object Notation)
+
+
+3. CREATE TABLE Products (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(50),
+    Price DECIMAL(10,2)
+);
+
+
+4.  INSERT INTO Products (ProductID, ProductName, Price)
+    VALUES (1, 'Laptop', 1200.00),
+           (2, 'Mouse', 25.50),
+           (3, 'Keyboard', 45.99);
+
+5.  NULL means the column can contain missing, unknown, or undefined values.
+    NOT NULL means the column must always contain a value; it cannot be left empty.
+
+6. ALTER TABLE Products
+   ADD CONSTRAINT UQ_ProductName UNIQUE (ProductName);
+
+7. --This query selects all products with a price greater than 100
+
+  SELECT * FROM Products
+  WHERE Price > 100;
+
+8. ALTER TABLE Products
+   ADD CategoryID INT;
+
+9. CREATE TABLE Categories (
+    CategoryID INT PRIMARY KEY,
+    CategoryName VARCHAR(50) UNIQUE
+);
+
+10. The IDENTITY property in SQL Server is used to automatically generate numeric values for a column, typically for primary keys.
+
+
+
+ MEDIUM:
+
+1. BULK INSERT Products
+FROM 'C:\Data\products_data.txt'
+WITH (
+    FIELDTERMINATOR = ',',
+    ROWTERMINATOR = '\n',
+    FIRSTROW = 2
+);
+
+2. ALTER TABLE Products
+   ADD CONSTRAINT FK_Products_Categories
+  FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID);
+
+4. ALTER TABLE Products
+   ADD CONSTRAINT CHK_Price_Positive
+  CHECK (Price > 0);
+
+5. ALTER TABLE Products
+   ADD Stock INT NOT NULL DEFAULT 0;
+
+6. SELECT ProductID, ProductName, ISNULL(Price, 0) AS Price
+  FROM Products;
+
+HARD:
+
+1. CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY,
+    CustomerName VARCHAR(100),
+    Age INT,
+    CONSTRAINT CHK_Age CHECK (Age >= 18)
+);
+
+2. CREATE TABLE SampleTable (
+    ID INT IDENTITY(100,10) PRIMARY KEY,
+    Description VARCHAR(100)
+);
+
+
+3. CREATE TABLE OrderDetails (
+    OrderID INT,
+    ProductID INT,
+    Quantity INT,
+    CONSTRAINT PK_OrderDetails PRIMARY KEY (OrderID, ProductID)
+);
+
+
+5. CREATE TABLE Employees (
+    EmpID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Email VARCHAR(100) UNIQUE
+);
+
+6. ALTER TABLE OrderDetails
+   ADD CONSTRAINT FK_OrderDetails_Orders
+   FOREIGN KEY (OrderID)
+   REFERENCES Orders(OrderID)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+
+
+  
+  
