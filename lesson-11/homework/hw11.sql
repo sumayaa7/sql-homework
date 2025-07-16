@@ -56,7 +56,7 @@ SELECT
 FROM Orders o
 JOIN Customers c ON o.CustomerID = c.CustomerID
 WHERE c.Country = 'USA'
-  AND EXTRACT(YEAR FROM o.OrderDate) = 2023;
+  AND  (YEAR FROM o.OrderDate) = 2023;
 
 5.
 SELECT 
