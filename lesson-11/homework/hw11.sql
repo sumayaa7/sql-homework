@@ -189,3 +189,52 @@ FROM Employees e
 JOIN Departments d ON e.DepartmentID = d.DepartmentID
 WHERE d.DepartmentName = 'Sales'
    OR e.HireDate > '2020-12-31';
+
+14.
+SELECT 
+    CONCAT(c.FirstName, ' ', c.LastName) AS CustomerName,
+    o.OrderID,
+    c.Address,
+    o.OrderDate
+FROM Customers c
+JOIN Orders o ON c.CustomerID = o.CustomerID
+WHERE c.Country = 'USA' AND c.Address LIKE '[0-9][0-9][0-9][0-9]%';
+
+15.
+SELECT 
+    p.ProductName,
+    c.CategoryName AS Category,
+    s.SaleAmount
+FROM Sales s
+JOIN Products p ON s.ProductID = p.ProductID
+JOIN Categories c ON p.Category = c.CategoryID
+WHERE c.CategoryName = 'Electronics' OR s.SaleAmount > 350;
+
+16.
+SELECT c.CategoryName, count (p.ProductID)
+FROM Products p
+JOIN Categories c on  p.Category = c.CategoryID
+group by CategoryName
+
+17. 
+SELECT 
+ CONCAT(c.FirstName, ' ', c.LastName) AS CustomerName,
+ c.City,
+ o.OrderID,
+ o.TotalAmount AS Amount
+FROM Customers c
+JOIN Orders o ON c.CustomerID = o.CustomerID
+WHERE c.City = 'Los Angeles' AND o.TotalAmount > 300; 
+
+18.
+select e.Name as EmployeeName, DepartmentName from Employees e 
+join Departments d on e.DepartmentID = d.DepartmentID 
+where DepartmentName = 'Human Resources' or DepartmentName = 'Finance'
+or e.Name like '%[a,e,i,o,u,A,E,I,O,U]%[a,e,i,o,u,A,E,I,O,U]%[a,e,i,o,u,A,E,I,O,U]%[a,e,i,o,u,A,E,I,O,U]%'
+
+19.
+select e.Name as EmployeeName, DepartmentName, Salary 
+from Employees e
+join Departments d on e.DepartmentID = d.DepartmentID
+where (DepartmentName = 'Sales' or DepartmentName = 'Marketing')
+and e.Salary > 60000
