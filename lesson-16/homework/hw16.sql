@@ -56,3 +56,32 @@ select ps.ProductID, ps.CategoryID, ps.TotalSales
 from ProductSales ps
 where ps.TotalSales > 500
 
+--7. all products with sales > $500
+
+select * from Sales
+select * from Employees
+
+;with ProductSales as (
+select s.ProductID,
+SUM(s.SalesAmount) as TotalSales
+from Sales s
+group by s.ProductID
+)
+select p.ProductName, ps.TotalSales
+from ProductSales ps
+join Products p on p.ProductID = ps.ProductID
+where ps.TotalSales > 500
+
+
+--8. emp with AvgSalary 
+
+select * from Employees
+
+;with AvgSalary as (
+select AVG(Salary) as AvgSal 
+from Employees
+)
+select * from Employees
+where Salary > (select AvgSal from AvgSalary)
+
+
