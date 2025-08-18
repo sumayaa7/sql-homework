@@ -73,11 +73,6 @@ FOR Fruit IN ([Apple], [Orange], [Banana])
 ) AS PivotTable
 
 --7.
-create table Family(ParentId int, ChildID int)
-insert into Family values (1, 2), (2, 3), (3, 4)
-select * from Family
-
--- если перед этим был другой оператор, начни CTE с ;  (важно для T-SQL)
 ;WITH FamilyTree AS (
     -- якорь: прямые связи родитель -> ребёнок
 SELECT ParentId, ChildID
