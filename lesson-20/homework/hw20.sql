@@ -145,3 +145,62 @@ SELECT * FROM Cheapest
 UNION ALL
 SELECT * FROM MostExpensive
 
+--11.
+;WITH Marked AS (
+SELECT ID, Vals,
+CASE WHEN Vals = 'Product' THEN 1 ELSE 0 END AS IsProduct
+FROM #RankingPuzzle
+),
+Grouped AS 
+(
+SELECT ID, Vals,
+SUM(IsProduct) OVER (ORDER BY ID ROWS UNBOUNDED PRECEDING) AS ProductRank
+FROM Marked
+)
+SELECT ProductRank, Vals
+FROM Grouped
+WHERE Vals <> 'Product'
+ORDER BY ProductRank, ID
+
+--12.
+SELECT e.EmployeeName, e.Department, e.SalesAmount,  e.SalesMonth, e.SalesYear
+FROM #EmployeeSales e
+WHERE e.SalesAmount > (
+SELECT AVG(e2.SalesAmount)
+FROM #EmployeeSales e2
+WHERE e2.Department = e.Department
+AND e2.SalesMonth = e.SalesMonth
+AND e2.SalesYear = e.SalesYear
+)
+
+--13.
+SELECT e.EmployeeName, e.Department, e.SalesAmount, e.SalesMonth, e.SalesYear
+FROM #EmployeeSales e
+WHERE NOT EXISTS (
+SELECT 1
+FROM #EmployeeSales e2
+WHERE e2.SalesMonth = e.SalesMonth
+AND e2.SalesYear = e.SalesYear
+AND e2.SalesAmount > e.SalesAmount
+)
+
+
+--14.
+SELECT DISTINCT e.EmployeeName
+FROM #EmployeeSales e
+WHERE NOT EXISTS 
+(
+SELECT 1
+FROM (
+SELECT DISTINCT SalesMonth, SalesYear
+FROM #EmployeeSales
+) m
+WHERE NOT EXISTS (
+SELECT 1
+FROM #EmployeeSales e2
+WHERE e2.EmployeeName = e.EmployeeName
+AND e2.SalesMonth = m.SalesMonth
+AND e2.SalesYear = m.SalesYear
+    )
+)
+
