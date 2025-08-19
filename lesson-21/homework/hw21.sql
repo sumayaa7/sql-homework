@@ -93,3 +93,67 @@ FROM ProductSales
 --14.Difference between each sale and the average sale amount
 SELECT SaleID, ProductName, SaleAmount, SaleAmount - AVG(SaleAmount) OVER () AS DiffFromAvg
 FROM ProductSales
+
+--15.Find employees who have the same salary rank
+;WITH SalaryRanks AS (
+SELECT EmployeeID, Name, Department, Salary,
+       DENSE_RANK() OVER (ORDER BY Salary DESC) AS SalaryRank
+FROM Employees1
+)
+SELECT * FROM SalaryRanks
+WHERE SalaryRank IN 
+(
+SELECT SalaryRank
+FROM SalaryRanks
+GROUP BY SalaryRank
+HAVING COUNT(*) > 1
+)
+
+--16.Identify the Top 2 highest salaries in each department
+SELECT * FROM (
+SELECT EmployeeID, Name, Department, Salary,
+       DENSE_RANK() OVER (PARTITION BY Department ORDER BY Salary DESC) AS rnk
+FROM Employees1
+) t
+WHERE rnk <= 2
+
+--17.Find the lowest-paid employee in each department
+SELECT * FROM (
+SELECT EmployeeID, Name, Department, Salary,
+       ROW_NUMBER() OVER (PARTITION BY Department ORDER BY Salary ASC) AS rnk
+FROM Employees1
+) t
+WHERE rnk = 1
+
+--18.Calculate the running total of salaries in each department
+SELECT EmployeeID, Name, Department, Salary,
+       SUM(Salary) OVER (PARTITION BY Department ORDER BY Salary) AS RunningTotal
+FROM Employees1
+
+--19.Find the total salary of each department without GROUP BY
+SELECT DISTINCT Department,
+SUM(Salary) OVER (PARTITION BY Department) AS TotalSalary
+FROM Employees1
+
+--20.Calculate the average salary in each department without GROUP BY
+SELECT DISTINCT Department,
+AVG(Salary) OVER (PARTITION BY Department) AS AvgSalary
+FROM Employees1
+
+--21.Find the difference between an employee’s salary and their department’s average
+SELECT EmployeeID, Name, Department, Salary,
+Salary - AVG(Salary) OVER (PARTITION BY Department) AS DiffFromDeptAvg
+FROM Employees1
+
+--22.Calculate the moving average salary over 3 employees (previous, current, next)
+SELECT EmployeeID, Name, Department, Salary,
+AVG(Salary) OVER (ORDER BY EmployeeID ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS MovingAvg
+FROM Employees1
+
+--23.Find the sum of salaries for the last 3 hired employees
+SELECT SUM(Salary) AS Last3TotalSalary
+FROM (
+    SELECT TOP 3 Salary
+    FROM Employees1
+    ORDER BY HireDate DESC
+) t
