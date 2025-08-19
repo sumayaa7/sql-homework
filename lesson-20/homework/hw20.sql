@@ -204,3 +204,39 @@ AND e2.SalesYear = m.SalesYear
     )
 )
 
+--15.
+SELECT Name, Price
+FROM Products
+WHERE Price > (SELECT AVG(Price) FROM Products)
+
+--16.
+SELECT Name, Stock
+FROM Products
+WHERE Stock < (SELECT MAX(Stock) FROM Products)
+
+--17.
+SELECT Name, Category
+FROM Products
+WHERE Category = (
+SELECT Category
+FROM Products
+WHERE Name = 'Laptop'
+)
+
+--18.
+SELECT Name, Category, Price
+FROM Products
+WHERE Price > (
+SELECT MIN(Price)
+FROM Products
+WHERE Category = 'Electronics'
+)
+
+--19.
+SELECT p.Name, p.Category, p.Price
+FROM Products p
+WHERE p.Price > (
+SELECT AVG(p2.Price)
+FROM Products p2
+WHERE p2.Category = p.Category
+)
