@@ -172,3 +172,62 @@ SELECT customer_id, customer_name, order_date, total_amount,
        LAG(total_amount) OVER (PARTITION BY customer_id ORDER BY order_date) AS previous_order_amount
 FROM sales_data
 WHERE total_amount > LAG(total_amount) OVER (PARTITION BY customer_id ORDER BY order_date)
+
+--20.
+SELECT customer_name, product_name, unit_price
+FROM sales_data
+WHERE unit_price > (SELECT AVG(unit_price) FROM sales_data);
+
+select * from sales_data
+
+--21.
+CREATE TABLE MyData (
+    Id INT, Grp INT, Val1 INT, Val2 INT
+);
+INSERT INTO MyData VALUES
+(1,1,30,29), (2,1,19,0), (3,1,11,45), (4,2,0,0), (5,2,100,17);
+
+--21.
+select * from MyData
+SELECT Id, Grp, Val1, Val2,
+CASE 
+WHEN ROW_NUMBER() OVER (PARTITION BY Grp ORDER BY Id) = 1 
+THEN SUM(Val1 + Val2) OVER (PARTITION BY Grp)
+END AS Tot
+FROM MyData
+
+CREATE TABLE TheSumPuzzle (
+    ID INT, Cost INT, Quantity INT
+);
+INSERT INTO TheSumPuzzle VALUES
+(1234,12,164), (1234,13,164), (1235,100,130), (1235,100,135), (1236,12,136);
+
+--22.
+SELECT Id,
+SUM(Cost) AS Cost,
+SUM(Quantity) AS Quantity
+FROM TheSumPuzzle
+GROUP BY Id
+
+
+CREATE TABLE Seats 
+( 
+SeatNumber INTEGER 
+); 
+
+INSERT INTO Seats VALUES 
+(7),(13),(14),(15),(27),(28),(29),(30), 
+(31),(32),(33),(34),(35),(52),(53),(54); 
+--23.
+
+select * from Seats
+;WITH cte AS (
+SELECT Id, Grp, Val1, Val2,
+ROW_NUMBER() OVER (PARTITION BY Grp ORDER BY Id) AS rn,
+SUM(Val1 + Val2) OVER (PARTITION BY Grp) AS grp_total
+FROM MyData
+)
+SELECT Id, Grp, Val1, Val2,
+CASE WHEN rn = 1 THEN grp_total END AS Tot
+FROM cte
+ORDER BY Grp, Id
