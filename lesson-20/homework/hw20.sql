@@ -240,3 +240,30 @@ SELECT AVG(p2.Price)
 FROM Products p2
 WHERE p2.Category = p.Category
 )
+
+--20.
+SELECT DISTINCT p.Name
+FROM Products p
+JOIN Orders o ON p.ProductID = o.ProductID
+
+--21.
+SELECT p.Name, o.Quantity
+FROM Orders o
+JOIN Products p ON p.ProductID = o.ProductID
+WHERE o.Quantity > (SELECT AVG(Quantity) FROM Orders)
+
+--22.
+SELECT Name
+FROM Products p
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Orders o
+    WHERE o.ProductID = p.ProductID
+)
+
+--23.
+SELECT TOP 1 p.Name, SUM(o.Quantity) AS TotalOrdered
+FROM Orders o
+JOIN Products p ON p.ProductID = o.ProductID
+GROUP BY p.Name
+ORDER BY TotalOrdered DESC
